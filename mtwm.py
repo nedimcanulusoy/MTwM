@@ -373,3 +373,155 @@ def one_hot_encoder(dataframe, drop_first=False):
 
 df = one_hot_encoder(df, drop_first=True)
 
+# Model
+y = df["MUSIC_EFFECTS"]
+X = df.drop(["MUSIC_EFFECTS"], axis=1)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)  # 80 train, 20 test
+
+mtwm_model = LGBMClassifier(colsample_bytree=0.6, learning_rate=0.1, max_depth=2, n_estimators=50, subsample=0.6,
+                            verbose=-1)
+mtwm_model.fit(X, y)
+
+
+# Make prediction based on user input
+def predict(model, data):
+    prediction = model.predict(data)
+    return prediction
+
+
+if st.button("Predict My Situation"):
+    # Get the last row of the dataframe as a new dataframe and make prediction with it and drop MUSIC_EFFECTS column
+    new_data = df.tail(1).drop(["MUSIC_EFFECTS"], axis=1)
+    prediction = predict(mtwm_model, new_data)
+    if prediction == 1:
+        st.write("Music can help you improve your mental health, which is why we recommend getting musiotherapy.")
+    else:
+        st.write(
+            "We can't guarantee that musiotherapy will help you in your current situation, therefore we recommend that you go to a psychologist for more effective support.")
+
+    values = ['Latin', 'Rock', 'Video game music', 'Jazz', 'R&B', 'K pop', 'Country', 'EDM', 'Hip hop', 'Pop', 'Rap',
+              'Classical', 'Metal', 'Folk', 'Lofi', 'Gospel']
+
+    music_dict = {value: [] for value in values}
+
+    # Assume the most popular music in each category is as follows
+    music_dict['Latin'] = ['Despacito', 'Bailando', 'La Bicicleta']
+    music_dict['Rock'] = ['Stairway to Heaven', 'Bohemian Rhapsody', 'Hotel California']
+    music_dict['Video game music'] = ['Final Fantasy VII Main Theme', 'Super Mario Bros. Theme', 'Halo Theme']
+    music_dict['Jazz'] = ['Take the A Train', 'Misty', 'Round Midnight']
+    music_dict['R&B'] = ['Sexual Healing', 'I Want You Back', 'Billie Jean']
+    music_dict['K pop'] = ['Gangnam Style', 'Dynamite', 'Butter']
+    music_dict['Country'] = ['Friends in Low Places', 'Amarillo by Morning', 'I Walk the Line']
+    music_dict['EDM'] = ['Levels', 'Silent Shout', 'Strobe']
+    music_dict['Hip hop'] = ['Rapper\'s Delight', 'N.Y. State of Mind', 'Started From the Bottom']
+    music_dict['Pop'] = ['Billie Jean', 'I Want It That Way', 'Naked by James Arthur']
+    music_dict['Rap'] = ['Rapper\'s Delight', 'N.Y. State of Mind', 'M.v.k Sıkıntı Misafirim']
+    music_dict['Classical'] = ['Beethoven\'s Symphony No. 5', 'Mozart\'s Symphony No. 40',
+                               'Bach\'s Brandenburg Concerto No. 3']
+    music_dict['Metal'] = ['Black Sabbath', 'Master of Puppets', 'Hallowed Be Thy Name']
+    music_dict['Folk'] = ['This Land Is Your Land', 'Blowin\' in the Wind', 'The Times They Are A-Changin\'']
+    music_dict['Lofi'] = ['Lofi Girl', 'Rainy Jazz', 'Chillhop Cafe']
+    music_dict['Gospel'] = ['Amazing Grace', 'Oh Happy Day', 'Total Praise']
+
+    psychologists = [
+        {
+            "name": "Dr. Adrian Johansson",
+            "country": "Sweden",
+            "contact": "+46 123 456 7890",
+            "address": "Vasagatan 12, Stockholm",
+            "website": "www.adrianpsychologist.se"
+        },
+        {
+            "name": "Dr. Emre Caldemir",
+            "country": "Turkey",
+            "contact": "+90 212 345 6789",
+            "address": "Istiklal Caddesi 123, Istanbul",
+            "website": "www.emrepsychologist.com"
+        },
+        {
+            "name": "Dr. Emma Andersson",
+            "country": "Sweden",
+            "contact": "+46 123 456 7890",
+            "address": "Sveavägen 34, Gothenburg",
+            "website": "www.emmapsychologist.se"
+        },
+        {
+            "name": "Dr. Ahsen Kaya",
+            "country": "Turkey",
+            "contact": "+90 212 345 6789",
+            "address": "Taksim Square 456, Istanbul",
+            "website": "www.ahsenpsychologist.com"
+        }
+    ]
+
+    random_psychologist = random.choice(psychologists)
+
+    if prediction == 1:
+        for key, value in music_dict.items():
+            if key == file.tail(1)['FAV_GENRE'].values[0]:
+                st.write(f"Here are our recommendations for {key} category music that will instantly make you better")
+                for i in range(3):
+                    st.write(f"{i + 1}. {value[i]}")
+    elif prediction == 0:
+        for key, value in music_dict.items():
+            if key == file.tail(1)['FAV_GENRE'].values[0]:
+                st.write(
+                    f"However, our music recommendations on {key} category that will make feel good to you for a short time period!")
+                st.write(f"Here is a psychologist that we recommend for you: {random_psychologist['name']}")
+                st.write(f"Country: {random_psychologist['country']}")
+                st.write(f"Contact: {random_psychologist['contact']}")
+                st.write(f"Address: {random_psychologist['address']}")
+                st.write(f"Website: {random_psychologist['website']}")
+                for i in range(3):
+                    st.write(f"{i + 1}. {value[i]}")
+
+st.markdown(
+    """
+<style>
+.main {
+background-color: #395675;
+font-size: 14px;
+}
+.reportview-container .main .block-container{
+    max-width: 1000px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+
+.stButton button {
+  color: white; /* change the text color */
+  padding: 10px 20px; /* adjust the padding */
+  border-radius: 8px; /* adjust the border radius */
+  font-size: 20px; /* adjust the font size */
+  cursor: pointer; /* change the cursor on hover */ 
+}
+
+.stButton button:hover {
+  background-color: #1b3a4b; /* change the background color on hover */
+}
+
+p {
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+a {
+  color: blue;
+  text-decoration: none;
+}
+
+a:hover {
+  color: darkblue;
+  text-decoration: underline;
+}
+
+
+</style>
+""",
+    unsafe_allow_html=True,
+)
+

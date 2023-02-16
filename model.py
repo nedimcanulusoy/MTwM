@@ -2,6 +2,7 @@ import warnings
 from lightgbm import LGBMClassifier
 from sklearn.model_selection import train_test_split
 from data_processing import return_df
+import pickle
 
 warnings.filterwarnings("ignore")
 
@@ -23,3 +24,10 @@ def model_training():
 def predict(model, data):
     prediction = model.predict(data)
     return prediction
+
+#Save model with pickle
+def save_model(model):
+    with open('model.pkl', 'wb') as file:
+        pickle.dump(model, file)
+
+save_model(model_training())

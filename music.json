@@ -1,0 +1,82 @@
+{
+    "Latin": [
+        "Despacito",
+        "Bailando",
+        "La Bicicleta"
+    ],
+    "Rock": [
+        "Stairway to Heaven",
+        "Bohemian Rhapsody",
+        "Hotel California"
+    ],
+    "Video game music": [
+        "Final Fantasy VII Main Theme",
+        "Super Mario Bros. Theme",
+        "Halo Theme"
+    ],
+    "Jazz": [
+        "Take the A Train",
+        "Misty",
+        "Round Midnight"
+    ],
+    "R&B": [
+        "Sexual Healing",
+        "I Want You Back",
+        "Billie Jean"
+    ],
+    "K pop": [
+        "Gangnam Style",
+        "Dynamite",
+        "Butter"
+    ],
+    "Country": [
+        "Friends in Low Places",
+        "Amarillo by Morning",
+        "I Walk the Line"
+    ],
+    "EDM": [
+        "Levels",
+        "Silent Shout",
+        "Strobe"
+    ],
+    "Hip hop": [
+        "Rapper's Delight",
+        "N.Y. State of Mind",
+        "Started From the Bottom"
+    ],
+    "Pop": [
+        "Billie Jean",
+        "I Want It That Way",
+        "Naked by James Arthur"
+    ],
+    "Rap": [
+        "Rapper's Delight",
+        "N.Y. State of Mind",
+        "M.v.k S\u0131k\u0131nt\u0131 Misafirim"
+    ],
+    "Classical": [
+        "Beethoven's Symphony No. 5",
+        "Mozart's Symphony No. 40",
+        "Bach's Brandenburg Concerto No. 3"
+    ],
+    "Metal": [
+        "Black Sabbath",
+        "Master of Puppets",
+        "Hallowed Be Thy Name"
+    ],
+    "Folk": [
+        "This Land Is Your Land",
+        "Blowin' in the Wind",
+        "The Times They Are A-Changin'"
+    ],
+    "Lofi": [
+        "Lofi Girl",
+        "Rainy Jazz",
+        "Chillhop Cafe"
+    ],
+    "Gospel": [
+        "Amazing Grace",
+        "Oh Happy Day",
+        "Total Praise"
+    ]
+}

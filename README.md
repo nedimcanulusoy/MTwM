@@ -50,15 +50,15 @@ streamlit run ui.py
 
 1) Survey on the web application with default values
 
-![survey](../MTwM/images/img.png "survey")
+![survey](/images/img.png "survey")
 
 2) Positive result
 
-![positive](../MTwM/images/img_1.png "positive")
+![positive](/images/img_1.png "positive")
 
 3) Negative result
 
-![negative](../MTwM/images/img_2.png "negative")
+![negative](/images/img_2.png "negative")
 
 ### Data
 

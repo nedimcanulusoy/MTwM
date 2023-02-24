@@ -1,11 +1,16 @@
 import datetime
 import random
+import json
 
 import pandas as pd
 import streamlit as st
 
 from data_processing import return_file, return_df
 from model import model_training, predict
+
+# Define global variables
+POSITIVE = "Positive"
+NEGATIVE = "Negative"
 
 
 def user_input():
@@ -131,92 +136,36 @@ mtwm_model = model_training()
 
 
 def app():
-    if st.button("Predict My Situation"):
-        # Get the last row of the dataframe as a new dataframe and make prediction with it and drop MUSIC_EFFECTS column
+    if st.button("Predict my situtation!"):
         new_data = df.tail(1).drop(["MUSIC_EFFECTS"], axis=1)
         prediction = predict(mtwm_model, new_data)
         if prediction == 1:
-            st.info("Music can help you improve your mental health, which is why we recommend getting musiotherapy.")
+            st.info(f"Your predicted music therapy situation is: {POSITIVE}")
+            st.info("You are in a situation where you could benefit from music therapy!")
+
+            # Make music suggestions based on user favourite genre
+            st.info("Here are some songs that you might like:")
+            with open("music.json", "r") as f:
+                music = json.load(f)
+
+            favorite_genre = file.tail(1)['FAV_GENRE'].values[0]
+            if favorite_genre in music:
+                for i, recommendation in enumerate(music[favorite_genre][:3], start=1):
+                    st.warning(f"{i}. {recommendation}")
+
         else:
-            st.info(
+            st.error(f"Your predicted music therapy situation is: {NEGATIVE}")
+            st.error(
                 "We can't guarantee that musiotherapy will help you in your current situation, therefore we recommend that you go to a psychologist for more effective support.")
+            with open("dummy_psychologists.json") as f:
+                psychologists = json.load(f)
 
-        values = ['Latin', 'Rock', 'Video game music', 'Jazz', 'R&B', 'K pop', 'Country', 'EDM', 'Hip hop', 'Pop',
-                  'Rap', 'Classical', 'Metal', 'Folk', 'Lofi', 'Gospel']
-
-        music_dict = {value: [] for value in values}
-
-        # Assume the most popular music in each category is as follows
-        music_dict['Latin'] = ['Despacito', 'Bailando', 'La Bicicleta']
-        music_dict['Rock'] = ['Stairway to Heaven', 'Bohemian Rhapsody', 'Hotel California']
-        music_dict['Video game music'] = ['Final Fantasy VII Main Theme', 'Super Mario Bros. Theme', 'Halo Theme']
-        music_dict['Jazz'] = ['Take the A Train', 'Misty', 'Round Midnight']
-        music_dict['R&B'] = ['Sexual Healing', 'I Want You Back', 'Billie Jean']
-        music_dict['K pop'] = ['Gangnam Style', 'Dynamite', 'Butter']
-        music_dict['Country'] = ['Friends in Low Places', 'Amarillo by Morning', 'I Walk the Line']
-        music_dict['EDM'] = ['Levels', 'Silent Shout', 'Strobe']
-        music_dict['Hip hop'] = ['Rapper\'s Delight', 'N.Y. State of Mind', 'Started From the Bottom']
-        music_dict['Pop'] = ['Billie Jean', 'I Want It That Way', 'Naked by James Arthur']
-        music_dict['Rap'] = ['Rapper\'s Delight', 'N.Y. State of Mind', 'M.v.k Sıkıntı Misafirim']
-        music_dict['Classical'] = ['Beethoven\'s Symphony No. 5', 'Mozart\'s Symphony No. 40',
-                                   'Bach\'s Brandenburg Concerto No. 3']
-        music_dict['Metal'] = ['Black Sabbath', 'Master of Puppets', 'Hallowed Be Thy Name']
-        music_dict['Folk'] = ['This Land Is Your Land', 'Blowin\' in the Wind', 'The Times They Are A-Changin\'']
-        music_dict['Lofi'] = ['Lofi Girl', 'Rainy Jazz', 'Chillhop Cafe']
-        music_dict['Gospel'] = ['Amazing Grace', 'Oh Happy Day', 'Total Praise']
-
-        psychologists = [
-            {
-                "name": "Dr. Adrian Johansson",
-                "country": "Sweden",
-                "contact": "+46 123 456 7890",
-                "address": "Vasagatan 12, Stockholm",
-                "website": "www.adrianpsychologist.se"
-            },
-            {
-                "name": "Dr. Emre Caldemir",
-                "country": "Turkey",
-                "contact": "+90 212 345 6789",
-                "address": "Istiklal Caddesi 123, Istanbul",
-                "website": "www.emrepsychologist.com"
-            },
-            {
-                "name": "Dr. Emma Andersson",
-                "country": "Sweden",
-                "contact": "+46 123 456 7890",
-                "address": "Sveavägen 34, Gothenburg",
-                "website": "www.emmapsychologist.se"
-            },
-            {
-                "name": "Dr. Ahsen Kaya",
-                "country": "Turkey",
-                "contact": "+90 212 345 6789",
-                "address": "Taksim Square 456, Istanbul",
-                "website": "www.ahsenpsychologist.com"
-            }
-        ]
-
-        random_psychologist = random.choice(psychologists)
-
-        if prediction == 1:
-            for key, value in music_dict.items():
-                if key == file.tail(1)['FAV_GENRE'].values[0]:
-                    st.info(
-                        f"Here are our recommendations for {key} category music that will instantly make you better")
-                    for i in range(3):
-                        st.info(f"{i + 1}. {value[i]}")
-        elif prediction == 0:
-            for key, value in music_dict.items():
-                if key == file.tail(1)['FAV_GENRE'].values[0]:
-                    st.info(
-                        f"However, our music recommendations on {key} category that will make feel good to you for a short time period!")
-                    st.info(f"Here is a psychologist that we recommend for you: {random_psychologist['name']}")
-                    st.info(f"Country: {random_psychologist['country']}")
-                    st.info(f"Contact: {random_psychologist['contact']}")
-                    st.info(f"Address: {random_psychologist['address']}")
-                    st.info(f"Website: {random_psychologist['website']}")
-                    for i in range(3):
-                        st.write(f"{i + 1}. {value[i]}")
+            psychologist = random.choice(list(psychologists.values()))
+            st.warning(f"We recommend you to contact {psychologist['name']} for more effective support.")
+            st.warning(f"Here is his/her contact information: {psychologist['contact']}")
+            st.warning(f"Here is his/her website: {psychologist['website']}")
+            st.warning(f"Here is his/her address: {psychologist['address']}")
+            st.warning(f"Here is his/her country: {psychologist['country']}")
 
 
 st.markdown(

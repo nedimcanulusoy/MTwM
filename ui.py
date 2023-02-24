@@ -136,7 +136,7 @@ mtwm_model = model_training()
 
 
 def app():
-    if st.button("Predict my situtation!"):
+    if st.button("Predict my situation!"):
         new_data = df.tail(1).drop(["MUSIC_EFFECTS"], axis=1)
         prediction = predict(mtwm_model, new_data)
         if prediction == 1:

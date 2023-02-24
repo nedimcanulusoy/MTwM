@@ -54,11 +54,11 @@ streamlit run ui.py
 
 2) Positive result
 
-![positive](/images/img_1.png "positive")
+![positive](/images/img_2.png "positive")
 
 3) Negative result
 
-![negative](/images/img_2.png "negative")
+![negative](/images/img_1.png "negative")
 
 ### Data
 
